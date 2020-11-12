@@ -1,0 +1,12 @@
+<!doctype html>
+<title>Hello from Flask</title>
+{% if name %}
+  <h1>Hello {{ name }}!</h1>
+{% else %}
+
+{% endif %}
+
+{% for f in fs %}
+  <a href={{ f['p'] }}> {{ f['name'] }}</a>
+  <br/>
+{% endfor %}
