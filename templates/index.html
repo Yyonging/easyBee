@@ -6,7 +6,7 @@
 
 {% endif %}
 
-{% for f in fs %}
-  <a href={{ f['p'] }}> {{ f['name'] }}</a>
+{% for f in first_layer %}
+  <a href={{ f.replace(" ", '') }}> {{ f.replace(" ", '') }}</a>
   <br/>
 {% endfor %}
