@@ -8,8 +8,7 @@ from config import Config
 
 app = Flask(__name__, static_url_path='/', static_folder='')
 
-fs = []
-first_layer = []
+fs = first_layer = []
 filter_p = ['/login', '/check']
 session = {}
 
