@@ -2,3 +2,4 @@
 *.html
 *.pdf
 .ipynb_checkpoints/* 
+local_config.py
