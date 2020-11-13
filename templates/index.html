@@ -2,11 +2,18 @@
 <title>Hello from Flask</title>
 {% if name %}
   <h1>Hello {{ name }}!</h1>
-{% else %}
-
 {% endif %}
 
-{% for f in first_layer %}
-  <a href={{ f.replace(" ", '') }}> {{ f.replace(" ", '') }}</a>
-  <br/>
-{% endfor %}
+{% if first_layer %}
+  {% for f in first_layer %}
+    <a href={{ f.replace(" ", '') }}> {{ f.replace(" ", '') }}</a>
+    <br/>
+  {% endfor %}
+{% else %}
+  {% for f in fs %}
+    <a href={{ f["p"].replace(" ", '') }}> {{ f["name"] }}</a>
+    <br/>
+  {% endfor %}
+{% endif %}
+
+
