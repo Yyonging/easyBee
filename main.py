@@ -20,7 +20,7 @@ def check():
         return redirect(url_for('index'))
     if checkAccount(r['account'], r['passwd']):
         session[r['account']] = uuid.uuid4().hex
-        outdate = datetime.datetime.today() + datetime.timedelta(minutes=10)
+        outdate = datetime.datetime.today() + datetime.timedelta(minutes=60)
         resp = make_response(redirect("index"))
         resp.set_cookie("easyBee", session[r['account']], expires=outdate)
         resp.set_cookie("name", r['account'], expires=outdate)
