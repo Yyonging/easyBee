@@ -15,16 +15,12 @@ session = {}
 @app.route('/check', methods=['POST'])
 def check():
     r = request.form
-    print(r)
     if checkLogin():
         return redirect(url_for('index'))
     if checkAccount(r['account'], r['passwd']):
-        session[r['account']] = uuid.uuid4().hex
-        outdate = datetime.datetime.today() + datetime.timedelta(minutes=60)
         resp = make_response(redirect("index"))
-        resp.set_cookie("easyBee", session[r['account']], expires=outdate)
-        resp.set_cookie("name", r['account'], expires=outdate)
-        return resp
+        session[r['account']] = uuid.uuid4().hex
+        return set_cookie(resp, session[r['account']], r['account'])
     return "无权访问！"
 
 @app.route('/login', methods=['get'])
@@ -48,7 +44,6 @@ def index():
 
 @app.before_request
 def reject():
-    print(request.path, checkLogin())
     if request.path == '/' and not checkLogin(): # 首页未登录
         return redirect(url_for('login_page'))
     if request.path == '/login' and checkLogin(): # login页面已登录
@@ -68,13 +63,25 @@ def reject():
         if f['p'].replace('\\', '/').replace(' ', '') == request.path:
             return render_template(f['p'][len(os.sep):].replace("\\", "/"))
 
+@app.after_request
+def reset_cookie(resp):
+    if resp and request.path != '/check':
+        return set_cookie(resp, request.cookies.get('easyBee'), request.cookies.get('name'))
+    return resp
+
 def checkLogin():
     name = request.cookies.get("name")
-    return name and name in session and session[name] == request.cookies.get("easyBee")
+    return session.get(name) == request.cookies.get("easyBee") != None
 
 def checkAccount(name, passwd):
     for account in Config.accounts:
         if passwd == account['passwd'] and name == account['name']:
             return True
+
+def set_cookie(resp, easybee_value, name_value):
+    outdate = datetime.datetime.today() + datetime.timedelta(minutes=60)
+    resp.set_cookie("easyBee", easybee_value, expires=outdate)
+    resp.set_cookie("name", name_value, expires=outdate)
+    return resp
 
 app.run(debug=True, host='0.0.0.0')
