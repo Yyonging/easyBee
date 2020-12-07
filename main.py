@@ -65,7 +65,7 @@ def reject():
 
 @app.after_request
 def reset_cookie(resp):
-    if resp and request.path != '/check':
+    if resp and request.path != '/check' and request.cookies.get('name'):
         return set_cookie(resp, request.cookies.get('easyBee'), request.cookies.get('name'))
     return resp
 
